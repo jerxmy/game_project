@@ -5,6 +5,7 @@ class Character {
     this.hitPoints = hitPoints;
     this.damage = damage;
   }
+  ftft;
 }
 
 const player1 = new Character(200, 20);
