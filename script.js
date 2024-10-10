@@ -1,4 +1,6 @@
 console.clear;
+console.log("Frangipute");
+console.log("Carapute");
 console.log("Pute");
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -20,6 +22,7 @@ let zombie = {
 let obstacles = [];
 let obstacleSpeed = 5;
 let spawnRate = 90; // Frames
+let minDistanceForAirObstacles = 5; // 5 obstacle dodged, start générate some obstacles in sky
 
 // Score
 let score = 0;
@@ -36,11 +39,24 @@ function drawZombie() {
 
 // Function create obstacle
 function createObstacle() {
+  let obstacleHeight = 30; // Height obstacle
+  let obstacleY = canvas.height - 60; // Base position (on the ground)
+
+  // If the score is higher than the defined threshold, aerial obstacles can be created
+  if (score > minDistanceForAirObstacles) {
+    let maxY = canvas.height - 150; // Max limit for the height obstacle
+    obstacleY =
+      Math.random() > 0.5
+        ? canvas.height - 60
+        : maxY + Math.random() * (canvas.height - maxY - 60);
+    // 50% chance that the obstacle is high with a random position
+  }
+
   let obstacle = {
     x: canvas.width,
-    y: canvas.height - 60,
+    y: obstacleY,
     width: 30,
-    height: 30,
+    height: obstacleHeight,
     color: "brown",
   };
   obstacles.push(obstacle);
