@@ -163,3 +163,4 @@ function gameLoop() {
 
 // Start game loop
 gameLoop();
+// end loop
