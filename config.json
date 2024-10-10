@@ -3,5 +3,5 @@
   "DB_PORT": "8889",
   "DB_USERNAME": "root",
   "DB_PASSWORD": "root",
-  "DB_NAME": "project_game"
+  "DB_NAME": "migrationTest"
 }
