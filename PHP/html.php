@@ -4,16 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Endless Runner</title>
+    <style>
+      body {
+        border: 0px;
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+        background-image: url('');
+        background-size: cover;
+        background-position: center;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
 </head>
 
 <body>
-    <div>J'aodre la sacuisse
+    <div>
         <?php
-        $request = $pdo->query("SELECT * FROM frangipute WHERE id=3");
-        $queryResult = $request->fetch(PDO::FETCH_ASSOC);
-
-        echo "J'ai " . $queryResult['quantity'] . " " . $queryResult['amandes'];
+        // Show up canvas for the game
+        echo '<canvas id="gameCanvas"></canvas>';
         ?>
     </div>
 </body>

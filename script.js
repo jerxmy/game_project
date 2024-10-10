@@ -5,6 +5,19 @@ console.log("Pute");
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// const zombieImage = new Image();
+// zombieImage.src = '';  // Change by the way of the image of player
+
+// const obstacleImages = [
+//   "", // obstacle 1
+//   "", // obstacle 2
+//   "", // obstacle 3
+// ].map((src) => {
+//   const img = new Image();
+//   img.src = src;
+//   return img;
+// });
+
 // Variables for the character
 let zombie = {
   x: 50,
@@ -24,6 +37,10 @@ let obstacleSpeed = 5;
 let spawnRate = 90; // Frames
 let minDistanceForAirObstacles = 5; // 5 obstacle dodged, start générate some obstacles in sky
 
+// Distance for the background change
+let distanceForBackgroundChange = 100;
+let backgroundChanged = false;
+
 // Score
 let score = 0;
 
@@ -35,9 +52,36 @@ let frameCount = 0;
 function drawZombie() {
   ctx.fillStyle = zombie.color;
   ctx.fillRect(zombie.x, zombie.y, zombie.width, zombie.height);
+  // ctx.drawImage(zombieImage, zombie.x, zombie.y, zombie.width, zombie.height);
 }
 
 // Function create obstacle
+
+// function createObstacle() {
+//   let obstacleHeight = zombie.height * 0.6;
+//   let obstacleY = canvas.height - 60;
+
+//   if (score > minDistanceForAirObstacles) {
+//     let maxY = canvas.height - 150;
+//     obstacleY =
+//       Math.random() > 0.5
+//         ? canvas.height - 60
+//         : maxY + Math.random() * (canvas.height - maxY - 60);
+//   }
+
+//   // Chose an image random of the obstacle
+//   const randomImageIndex = Math.floor(Math.random() * obstacleImages.length);
+//   let obstacle = {
+//     x: canvas.width,
+//     y: obstacleY,
+//     width: zombie.width * 0.6,
+//     height: obstacleHeight,
+//     image: obstacleImages[randomImageIndex], // Random image for this obstacle
+//   };
+
+//   obstacles.push(obstacle);
+//}
+
 function createObstacle() {
   let obstacleHeight = 30; // Height obstacle
   let obstacleY = canvas.height - 60; // Base position (on the ground)
@@ -134,6 +178,12 @@ function update() {
     obstacleSpeed += 0.5;
   }
 
+  // Change the background after a certain score
+  if (score >= distanceForBackgroundChange && !backgroundChanged) {
+    canvas.style.backgroundImage = "url('')";
+    backgroundChanged = true; // change once
+  }
+
   frameCount++;
 }
 
@@ -163,4 +213,3 @@ function gameLoop() {
 
 // Start game loop
 gameLoop();
-// end loop
