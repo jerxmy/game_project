@@ -1,19 +1,26 @@
-const mysql = require("mysql");
+let mysql = require("mysql");
 
 let con = mysql.createConnection({
-  host: "localHost",
+  host: "localhost",
   user: "root",
-  password: "root",
+  password: "",
   database: "migrationTest",
 });
 
 con.connect(function (err) {
   if (err) throw err;
-  console.log("Connected");
-  let querySooS =
-    "CREATE TABLE IF NOT EXISTS obstacles(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), isDangerous BOOL, image VARCHAR(255))";
-  con.query(querySooS, function (err, result) {
+  console.log("Successfully connected to the database");
+  let sql =
+    "CREATE TABLE IF NOT EXISTS frangipane (id INT AUTO_INCREMENT PRIMARY KEY, amandes VARCHAR(255), quantity INT)";
+  con.query(sql, function (err, result) {
     if (err) throw err;
-    console.log("Table successfully created ! ");
+    console.log("Table successfully created");
+  });
+
+  sql =
+    "CREATE TABLE IF NOT EXISTS frangipute (id INT AUTO_INCREMENT PRIMARY KEY, amandes VARCHAR(255), quantity INT)";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Table successfully created");
   });
 });

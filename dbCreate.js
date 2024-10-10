@@ -1,21 +1,19 @@
-const mysql = require("mysql");
+let mysql = require("mysql");
 
 let con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
-  database: "migrationTest",
+  password: "",
 });
 
 con.connect(function (err) {
   if (err) throw err;
   console.log("Connected");
   con.query(
-    "CREATE DATABASE IF NOT EXIST migrationTest",
+    "CREATE DATABASE IF NOT EXISTS migrationTest",
     function (err, result) {
-      if ((err, result)) {
-        console.log("Database created !");
-      }
+      if (err) throw err;
+      console.log("Database created !");
     }
   );
 });

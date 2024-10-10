@@ -8,9 +8,12 @@
 </head>
 
 <body>
-    <div>
+    <div>J'aodre la sacuisse
         <?php
-        
+        $request = $pdo->query("SELECT * FROM frangipute WHERE id=3");
+        $queryResult = $request->fetch(PDO::FETCH_ASSOC);
+
+        echo "J'ai " . $queryResult['quantity'] . " " . $queryResult['amandes'];
         ?>
     </div>
 </body>
