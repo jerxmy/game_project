@@ -1,7 +1,7 @@
 console.clear;
 console.log("Frangipute");
 console.log("Carapute");
-console.log("Pute");
+console.log("Pupute");
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
