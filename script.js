@@ -195,6 +195,7 @@ function drawScore() {
 }
 
 // Function for manage the endgame
+
 function gameOver() {
   alert("Game Over! Final score: " + score);
   document.location.reload();
