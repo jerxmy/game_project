@@ -80,7 +80,7 @@ function drawZombie() {
 //   };
 
 //   obstacles.push(obstacle);
-//}
+// }
 
 function createObstacle() {
   let obstacleHeight = 30; // Height obstacle
