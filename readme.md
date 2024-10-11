@@ -1,6 +1,6 @@
 POUR UTILISATEUR MAC :
 
-Mettre port SQL + root
+Mettre port SQL / port PHP via MAMP + root
 
 POUR WAMP :
 
