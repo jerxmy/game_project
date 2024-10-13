@@ -17,3 +17,16 @@ try {
     die("Can't connect to $dbName :" . $e->getMessage());
 }
 
+if (isset($_GET["id"])) {
+    $amandeId = $_GET["id"];
+    $request = $pdo->prepare('SELECT * FROM obstacles WHERE id = :amandeId');
+    $request->bindParam(':amandeId', $amandeId, PDO::PARAM_STR);
+
+    $amande = $request->execute();
+    $amande = $request->fetch(PDO::FETCH_ASSOC);
+} else {
+    echo "Mets tes paramètres fdp";
+}
+
+
+echo $amande['amandes'];

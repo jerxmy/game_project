@@ -18,11 +18,4 @@ con.connect(function (err) {
     if (err) throw err;
     console.log("Table successfully created");
   });
-
-  sql =
-    "CREATE TABLE IF NOT EXISTS background (id INT AUTO_INCREMENT PRIMARY KEY, amandes VARCHAR(255), quantity INT)";
-  con.query(sql, function (err, result) {
-    if (err) throw err;
-    console.log("Table successfully created");
-  });
 });
