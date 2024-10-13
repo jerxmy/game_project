@@ -1,35 +1,27 @@
 console.clear;
-console.log("Frangipute");
-console.log("Carapute");
-console.log("Pupute");
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// const zombieImage = new Image();
-// zombieImage.src = '';  // Change by the way of the image of player
-
-// const obstacleImages = [
-//   "", // obstacle 1
-//   "", // obstacle 2
-//   "", // obstacle 3
-// ].map((src) => {
-//   const img = new Image();
-//   img.src = src;
-//   return img;
-// });
-
-// Variables for the character
-let zombie = {
-  x: 50,
-  y: canvas.height - 80, // Initial position
-  width: 50,
-  height: 50,
-  color: "green",
-  dy: 0,
-  gravity: 0.5,
-  jumpPower: -10,
+const zombieImage = new Image();
+zombieImage.src = "./img/Player.png"; // Change by the way of the image of player
+const playerStats = {
+  jumpPower: -20,
   isJumping: false,
+  gravity: 0.5,
+  dy: 0,
+  x: 0,
+  y: canvas.height - 100,
 };
+
+const obstacleImages = [
+  "./img/obstacle1.png", // obstacle 1
+  "./img/obstacle2.png", // obstacle 2
+  "./img/obstacle3.png", // obstacle 3
+].map((src) => {
+  const img = new Image();
+  img.src = src;
+  return img;
+});
 
 // Obstacles
 let obstacles = [];
@@ -47,91 +39,86 @@ let score = 0;
 // Game's variables
 let gameSpeed = 1;
 let frameCount = 0;
+const gravity = 0.5;
+console.log(zombieImage);
 
 // Function draw
 function drawZombie() {
-  ctx.fillStyle = zombie.color;
-  ctx.fillRect(zombie.x, zombie.y, zombie.width, zombie.height);
-  // ctx.drawImage(zombieImage, zombie.x, zombie.y, zombie.width, zombie.height);
+  // ctx.fillStyle = zombieImage.color;
+  // ctx.fillRect(zombieImage.x, zombieImage.y, zombieImage.width, zombieImage.height);
+  ctx.drawImage(
+    zombieImage,
+    playerStats.x,
+    playerStats.y,
+    zombieImage.width,
+    zombieImage.height
+  );
 }
 
 // Function create obstacle
-
-// function createObstacle() {
-//   let obstacleHeight = zombie.height * 0.6;
-//   let obstacleY = canvas.height - 60;
-
-//   if (score > minDistanceForAirObstacles) {
-//     let maxY = canvas.height - 150;
-//     obstacleY =
-//       Math.random() > 0.5
-//         ? canvas.height - 60
-//         : maxY + Math.random() * (canvas.height - maxY - 60);
-//   }
-
-//   // Chose an image random of the obstacle
-//   const randomImageIndex = Math.floor(Math.random() * obstacleImages.length);
-//   let obstacle = {
-//     x: canvas.width,
-//     y: obstacleY,
-//     width: zombie.width * 0.6,
-//     height: obstacleHeight,
-//     image: obstacleImages[randomImageIndex], // Random image for this obstacle
-//   };
-
-//   obstacles.push(obstacle);
-// }
-
 function createObstacle() {
-  let obstacleHeight = 30; // Height obstacle
-  let obstacleY = canvas.height - 60; // Base position (on the ground)
+  const randomImageIndex = Math.floor(Math.random() * obstacleImages.length);
+  const obstacleImage = obstacleImages[randomImageIndex];
 
-  // If the score is higher than the defined threshold, aerial obstacles can be created
+  // Attendre que l'image soit chargée avant de définir la taille
+  const scaleFactor = 1.5; // Ajuster ce facteur pour agrandir les obstacles
+  const obstacleWidth = obstacleImage.width * scaleFactor;
+  const obstacleHeight = obstacleImage.height * scaleFactor;
+  let obstacleY = canvas.height - obstacleHeight - 10;
+
+  // Génération d'obstacles aériens si le score est élevé
   if (score > minDistanceForAirObstacles) {
-    let maxY = canvas.height - 150; // Max limit for the height obstacle
+    const maxY = canvas.height - 150;
     obstacleY =
       Math.random() > 0.5
-        ? canvas.height - 60
-        : maxY + Math.random() * (canvas.height - maxY - 60);
-    // 50% chance that the obstacle is high with a random position
+        ? canvas.height - obstacleHeight - 10
+        : maxY + Math.random() * (canvas.height - maxY - obstacleHeight - 10);
   }
 
-  let obstacle = {
+  const obstacle = {
     x: canvas.width,
     y: obstacleY,
-    width: 30,
+    width: obstacleWidth,
     height: obstacleHeight,
-    color: "brown",
+    image: obstacleImage,
   };
+
+  console.log("Obstacle created:", obstacle);
   obstacles.push(obstacle);
 }
 
 // Function draw obstacles
 function drawObstacles() {
   obstacles.forEach((obstacle) => {
-    ctx.fillStyle = obstacle.color;
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    ctx.drawImage(
+      obstacle.image,
+      obstacle.x,
+      obstacle.y,
+      obstacle.width,
+      obstacle.height
+    );
   });
 }
 
 // Function update obstacle
 function updateObstacles() {
-  obstacles.forEach((obstacle) => {
+  obstacles.forEach((obstacle, index) => {
     obstacle.x -= obstacleSpeed;
 
-    // Check up if obstacle go out of screen
     if (obstacle.x + obstacle.width < 0) {
-      obstacles.shift(); // Delete first obstacle
+      obstacles.splice(index, 1);
       score++;
+      console.log("Obstacle passed, new score:", score);
     }
 
-    // Collision with player
+    // Detect collision with obstacles
     if (
-      zombie.x < obstacle.x + obstacle.width &&
-      zombie.x + zombie.width > obstacle.x &&
-      zombie.y < obstacle.y + obstacle.height &&
-      zombie.y + zombie.height > obstacle.y
+      playerStats.x < obstacle.x + obstacle.width &&
+      playerStats.x + playerStats.width > obstacle.x &&
+      playerStats.y < obstacle.y + obstacle.height &&
+      playerStats.y + playerStats.height > obstacle.y
     ) {
+      console.log("Collision detected with:", obstacle);
       gameOver();
     }
   });
@@ -139,9 +126,9 @@ function updateObstacles() {
 
 // Function jump
 function jump() {
-  if (!zombie.isJumping) {
-    zombie.dy = zombie.jumpPower;
-    zombie.isJumping = true;
+  if (!playerStats.isJumping) {
+    playerStats.dy = playerStats.jumpPower;
+    playerStats.isJumping = true;
   }
 }
 
@@ -155,14 +142,17 @@ document.addEventListener("keydown", function (e) {
 // Function for updating game
 function update() {
   // Gravity
-  zombie.dy += zombie.gravity;
-  zombie.y += zombie.dy;
+  playerStats.dy += gravity;
+  // console.log(playerStats.x);
+
+  playerStats.y += playerStats.dy;
+  // console.log(playerStats.y);
 
   // Limit of height
-  if (zombie.y > canvas.height - 80) {
-    zombie.y = canvas.height - 80;
-    zombie.dy = 0;
-    zombie.isJumping = false;
+  if (playerStats.y > canvas.height - 200) {
+    playerStats.y = canvas.height - 200;
+    playerStats.dy = 0;
+    playerStats.isJumping = false;
   }
 
   // Add somes obstacle with regular interval
